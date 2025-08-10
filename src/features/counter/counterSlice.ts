@@ -87,3 +87,13 @@ export const incrementIfOdd =
       dispatch(incrementByAmount(amount))
     }
   }
+
+export const incrementIfEven =
+  (amount: number): AppThunk =>
+  (dispatch, getState) => {
+    const currentValue = selectCount(getState())
+
+    if (currentValue % 2 === 0) {
+      dispatch(incrementByAmount(amount))
+    }
+  }

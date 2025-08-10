@@ -8,6 +8,7 @@ import {
   incrementAsync,
   incrementByAmount,
   incrementIfOdd,
+  incrementIfEven,
   selectCount,
   selectStatus,
 } from "./counterSlice"
@@ -73,6 +74,14 @@ export const Counter = (): JSX.Element => {
           }}
         >
           Add If Odd
+        </button>
+        <button
+          className={styles.button}
+          onClick={() => {
+            dispatch(incrementIfEven(incrementValue))
+          }}
+        >
+          Add If Even
         </button>
       </div>
     </div>
