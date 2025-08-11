@@ -1,3 +1,4 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit'
 
 // Define a TS type for the data we'll be using
@@ -17,10 +18,20 @@ const initialState: Post[] = [
 export const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {},
+  reducers: {
+    // Declare a "case reducer" named `postAdded`.
+    // The type of `action.payload` will be a `Post` object.
+    postAdded(state, action: PayloadAction<Post>) {
+      // "Mutate" the existing state array, which is
+      // safe to do here because `createSlice` uses Immer inside.
+      state.push(action.payload)
+    }
+  },
   selectors: {
     selectPosts: state => state,
   },
 })
+
+export const { postAdded } = postsSlice.actions
 
 export const { selectPosts } = postsSlice.selectors
