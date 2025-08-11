@@ -1,5 +1,6 @@
 import "./App.css"
 import { Counter } from "./features/counter/Counter"
+import { PostsList } from "./features/posts/PostsList"
 import { Quotes } from "./features/quotes/Quotes"
 import logo from "./logo.svg"
 
@@ -11,6 +12,7 @@ export const App = () => (
       <p>
         Edit <code>src/App.tsx</code> and save to reload.
       </p>
+      <PostsList />
       <Quotes />
       <span>
         <span>Learn </span>

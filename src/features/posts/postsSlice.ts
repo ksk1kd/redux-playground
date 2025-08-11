@@ -17,5 +17,10 @@ const initialState: Post[] = [
 export const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {}
+  reducers: {},
+  selectors: {
+    selectPosts: state => state,
+  },
 })
+
+export const { selectPosts } = postsSlice.selectors
