@@ -1,22 +1,24 @@
 import { Link } from 'react-router-dom'
 
 import { useAppSelector } from "../../app/hooks"
-import { selectPosts } from "./postsSlice"
+import {
+  selectPosts,
+} from "./postsSlice"
 
-export const PostsList = () => {
+export const PostsMainPage = () => {
   const posts = useAppSelector(selectPosts)
 
   const renderedPosts = posts.map(post => (
     <article className="post-excerpt" key={post.id}>
-      <h3><Link to={`/posts/${post.id}`}>{post.title}</Link></h3>
+      <h2><Link to={`/posts/${post.id}`}>{post.title}</Link></h2>
       <p className="post-content">{post.content.substring(0, 100)}</p>
     </article>
   ))
 
   return (
-    <section className="posts-list">
-      <h2>Posts</h2>
+    <>
+      <h1>Posts</h1>
       {renderedPosts}
-    </section>
+    </>
   )
 }
