@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 import "./App.css"
+import { EditPostForm } from './features/posts/EditPostForm'
 import { PostsList } from "./features/posts/PostsList"
 import { PostsMainPage } from './features/posts/PostsMainPage'
 import { SinglePostPage } from './features/posts/SinglePostPage'
@@ -17,6 +18,7 @@ export const App = () => (
         <Route path="/" element={<PostsList />}></Route>
         <Route path="/posts" element={<PostsMainPage />}></Route>
         <Route path="/posts/:postId" element={<SinglePostPage />} />
+        <Route path="/editPost/:postId" element={<EditPostForm />} />
       </Routes>
     </div>
   </Router>
