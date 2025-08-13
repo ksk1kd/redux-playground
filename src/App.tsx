@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 
 import "./App.css"
 import { AddPostForm } from './features/posts/AddPostForm'
@@ -12,7 +12,7 @@ export const App = () => (
     <div className="App">
       <header>
         <nav>
-          <a href="/">Home</a> <a href="/posts">Posts</a>
+          <Link to="/">Home</Link> <Link to="/posts">Posts</Link> 
         </nav>
       </header>
       <Routes>
