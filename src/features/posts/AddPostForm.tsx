@@ -1,9 +1,9 @@
 import type React from 'react'
-import { nanoid } from '@reduxjs/toolkit'
+import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from "../../app/hooks"
 
-import { type Post, postAdded } from './postsSlice'
+import { postAdded } from './postsSlice'
 
 // TS types for the input fields
 // See: https://epicreact.dev/how-to-type-a-react-form-on-submit-handler/
@@ -16,6 +16,8 @@ type AddPostFormElements = {
 } & HTMLFormElement
 
 export const AddPostForm = () => {
+  const navigate = useNavigate()
+
   // Get the `dispatch` method from the store
   const dispatch = useAppDispatch()
 
@@ -27,15 +29,8 @@ export const AddPostForm = () => {
     const title = elements.postTitle.value
     const content = elements.postContent.value
 
-    // Create the post object and dispatch the `postAdded` action
-    const newPost: Post = {
-      id: nanoid(),
-      title,
-      content
-    }
-    dispatch(postAdded(newPost))
-
-    e.currentTarget.reset()
+    dispatch(postAdded(title, content))
+    void navigate("/posts") 
   }
 
   return (

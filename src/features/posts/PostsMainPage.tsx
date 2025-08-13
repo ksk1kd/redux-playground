@@ -19,6 +19,7 @@ export const PostsMainPage = () => {
     <>
       <h1>Posts</h1>
       {renderedPosts}
+      <Link to="/addPost">Add</Link>
     </>
   )
 }
