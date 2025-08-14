@@ -40,9 +40,10 @@ export const postsSlice = createSlice({
   },
   selectors: {
     selectPosts: state => state,
+    selectPostById: (state, postId: string) => state.find(post => post.id === postId)
   },
 })
 
 export const { postAdded, postUpdated } = postsSlice.actions
 
-export const { selectPosts } = postsSlice.selectors
+export const { selectPosts, selectPostById } = postsSlice.selectors
