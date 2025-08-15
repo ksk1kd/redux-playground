@@ -8,11 +8,17 @@ export type Post = {
   content: string
 }
 
-// Create an initial state value for the reducer, with that type
-const initialState: Post[] = [
-  { id: '1', title: 'First Post!', content: 'Hello!' },
-  { id: '2', title: 'Second Post', content: 'More text' }
-]
+type PostsState = {
+  posts: Post[]
+  status: 'idle' | 'pending' | 'succeeded' | 'failed'
+  error: string | null
+}
+
+const initialState: PostsState = {
+  posts: [],
+  status: 'idle',
+  error: null
+}
 
 // Create the slice and pass in the initial state
 export const postsSlice = createSlice({
@@ -21,7 +27,7 @@ export const postsSlice = createSlice({
   reducers: {
     postAdded: {
       reducer(state, action: PayloadAction<Post>) {
-        state.push(action.payload)
+        state.posts.push(action.payload)
       },
       prepare(title: string, content: string) {
         return {
@@ -31,7 +37,7 @@ export const postsSlice = createSlice({
     },
     postUpdated(state, action: PayloadAction<Post>) {
       const { id, title, content } = action.payload
-      const existingPost = state.find(post => post.id === id)
+      const existingPost = state.posts.find(post => post.id === id)
       if (existingPost) {
         existingPost.title = title
         existingPost.content = content
@@ -39,11 +45,13 @@ export const postsSlice = createSlice({
     }
   },
   selectors: {
-    selectPosts: state => state,
-    selectPostById: (state, postId: string) => state.find(post => post.id === postId)
+    selectPosts: state => state.posts,
+    selectPostById: (state, postId: string) => state.posts.find(post => post.id === postId),
+    selectPostsStatus: (state) => state.status,
+    selectPostsError: (state) => state.error
   },
 })
 
 export const { postAdded, postUpdated } = postsSlice.actions
 
-export const { selectPosts, selectPostById } = postsSlice.selectors
+export const { selectPosts, selectPostById, selectPostsStatus, selectPostsError } = postsSlice.selectors
