@@ -1,6 +1,9 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 
+import { createAppAsyncThunk } from '../../app/withTypes'
+import { fetchMockPosts } from './postsAPI';
+
 // Define a TS type for the data we'll be using
 export type Post = {
   id: string
@@ -13,6 +16,11 @@ type PostsState = {
   status: 'idle' | 'pending' | 'succeeded' | 'failed'
   error: string | null
 }
+
+export const fetchPosts = createAppAsyncThunk('posts/fetchPosts', async () => {
+  const response = await fetchMockPosts()
+  return response.data
+})
 
 const initialState: PostsState = {
   posts: [],
@@ -43,6 +51,20 @@ export const postsSlice = createSlice({
         existingPost.content = content
       }
     }
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(fetchPosts.pending, (state) => {
+        state.status = 'pending'
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.posts.push(...action.payload)
+      })
+      .addCase(fetchPosts.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message ?? 'Unknown Error'
+      })
   },
   selectors: {
     selectPosts: state => state.posts,

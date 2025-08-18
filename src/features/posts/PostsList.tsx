@@ -1,10 +1,19 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import { useAppSelector } from "../../app/hooks"
-import { selectPosts } from "./postsSlice"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { fetchPosts, selectPosts, selectPostsStatus } from "./postsSlice"
 
 export const PostsList = () => {
+  const dispatch = useAppDispatch()
   const posts = useAppSelector(selectPosts)
+  const postStatus = useAppSelector(selectPostsStatus)
+
+  useEffect(() => {
+    if (postStatus === 'idle') {
+      void dispatch(fetchPosts())
+    }
+  }, [postStatus, dispatch])
 
   const renderedPosts = posts.map(post => (
     <article className="post-excerpt" key={post.id}>
