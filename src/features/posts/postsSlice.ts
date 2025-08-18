@@ -17,10 +17,21 @@ type PostsState = {
   error: string | null
 }
 
-export const fetchPosts = createAppAsyncThunk('posts/fetchPosts', async () => {
-  const response = await fetchMockPosts()
-  return response.data
-})
+export const fetchPosts = createAppAsyncThunk(
+  'posts/fetchPosts', 
+  async () => {
+    const response = await fetchMockPosts()
+    return response.data
+  },
+  {
+    condition(_, thunkApi) {
+      const postsStatus = selectPostsStatus(thunkApi.getState())
+      if (postsStatus !== 'idle') {
+        return false
+      }
+    }
+  }
+)
 
 const initialState: PostsState = {
   posts: [],
