@@ -2,11 +2,26 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { fetchPosts, selectPosts, selectPostsStatus, selectPostsError } from "./postsSlice"
+import { fetchPosts, selectPostIds, selectPostById, selectPostsStatus, selectPostsError } from "./postsSlice"
+
+type PostExcerptProps = {
+  postId: string
+}
+
+function PostExcerpt({ postId }: PostExcerptProps) {
+  const post = useAppSelector(state => selectPostById(state, postId))
+
+  return (
+    <article className="post-excerpt" key={post.id}>
+      <h3><Link to={`/posts/${post.id}`}>{post.title}</Link></h3>
+      <p className="post-content">{post.content.substring(0, 100)}</p>
+    </article>
+  )
+}
 
 export const PostsList = () => {
   const dispatch = useAppDispatch()
-  const posts = useAppSelector(selectPosts)
+  const postIds = useAppSelector(selectPostIds)
   const postStatus = useAppSelector(selectPostsStatus)
   const postsError = useAppSelector(selectPostsError)
 
@@ -21,11 +36,8 @@ export const PostsList = () => {
   if (postStatus === 'pending') {
     content = <p>Loading...</p>
   } else if (postStatus === 'succeeded') {
-    content = posts.map(post => (
-      <article className="post-excerpt" key={post.id}>
-        <h3><Link to={`/posts/${post.id}`}>{post.title}</Link></h3>
-        <p className="post-content">{post.content.substring(0, 100)}</p>
-      </article>
+    content = postIds.map(postId => (
+      <PostExcerpt key={postId} postId={postId} />
     ))
   } else if (postStatus === 'failed') {
     content = <p>{postsError}</p>
