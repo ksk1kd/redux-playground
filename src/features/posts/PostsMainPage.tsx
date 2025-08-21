@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import { useAppSelector } from "../../app/hooks"
-import { selectPostById, selectPostIds } from "./postsSlice"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { fetchPosts, selectPostById, selectPostIds, selectPostsStatus, selectPostsError } from "./postsSlice"
 
 type PostExcerptProps = {
   postId: string
@@ -19,16 +20,33 @@ function PostExcerpt({ postId }: PostExcerptProps) {
 }
 
 export const PostsMainPage = () => {
+  const dispatch = useAppDispatch()
   const postIds = useAppSelector(selectPostIds)
+  const postStatus = useAppSelector(selectPostsStatus)
+  const postsError = useAppSelector(selectPostsError)
 
-  const renderedPosts = postIds.map(postId => (
-    <PostExcerpt key={postId} postId={postId} />
-  ))
+  useEffect(() => {
+    if (postStatus === 'idle') {
+      void dispatch(fetchPosts())
+    }
+  }, [postStatus, dispatch])
+
+  let content: React.ReactNode
+
+  if (postStatus === 'pending') {
+    content = <p>Loading...</p>
+  } else if (postStatus === 'succeeded') {
+    content = postIds.map(postId => (
+      <PostExcerpt key={postId} postId={postId} />
+    ))
+  } else if (postStatus === 'failed') {
+    content = <p>{postsError}</p>
+  }
 
   return (
     <>
       <h1>Posts</h1>
-      {renderedPosts}
+      {content}
       <Link to="/addPost">Add</Link>
     </>
   )
